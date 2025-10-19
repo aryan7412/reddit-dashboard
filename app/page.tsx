@@ -1,10 +1,10 @@
 import React from 'react'
-import {ModeToggle} from "@/components/ModeToggle"
+import Navbar from "@/components/Navbar/page"
 
 const page = () => {
   return (
-    <div className="h-screen items-center justify-center flex">
-      <ModeToggle />
+    <div >
+      <Navbar /> 
     </div>
   )
 }
