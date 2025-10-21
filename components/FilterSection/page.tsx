@@ -11,7 +11,7 @@ interface Subreddit {
 const favorites: Subreddit[] = [
   { name: 'r/funymore', avatar: 'https://placehold.co/32x32/FFDDC1/8B5CF6?text=F', count: 156 },
   { name: 'r/breadkingnews', avatar: 'https://placehold.co/32x32/E0E7FF/4F46E5?text=B', count: 12 },
-  { name: 'r/lovestory', avatar: 'https://placehold.co/32x32/FEE2E2/DC2626?text=L', count: 0 }, // No count to show conditional rendering
+  { name: 'r/lovestory', avatar: 'https://placehold.co/32x32/FEE2E2/DC2626?text=L', count: 0 },
   { name: 'r/gamingfun', avatar: 'https://placehold.co/32x32/D1FAE5/059669?text=G', count: 8 },
 ];
 
@@ -32,10 +32,10 @@ const community: Subreddit[] = [
 
 // Subreddit Item Component
 const SubredditItem: React.FC<{ subreddit: Subreddit }> = ({ subreddit }) => (
-  <a href="#" className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-200 transition-colors duration-150">
+  <a href="#" className="flex items-center justify-between py-1.25 px-3 rounded-lg hover:bg-gray-200 transition-colors duration-150">
     <div className="flex items-center space-x-3">
-      <img src={subreddit.avatar} alt={`${subreddit.name} avatar`} className="w-8 h-8 rounded-full object-cover" />
-      <span className="font-medium text-gray-700">{subreddit.name}</span>
+      <img src={subreddit.avatar} alt={`${subreddit.name} avatar`} className="w-7 h-7 rounded-full object-cover" />
+      <span className="font-medium text-gray-500 text-sm">{subreddit.name}</span>
     </div>
     {subreddit.count > 0 && (
       <span className="bg-gray-200 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">
@@ -49,8 +49,8 @@ const SubredditItem: React.FC<{ subreddit: Subreddit }> = ({ subreddit }) => (
 const FilterSection: React.FC<{ title: string; items: Subreddit[] }> = ({ title, items }) => (
   <div className="py-4">
     <div className="flex justify-between items-center px-3 mb-2">
-      <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider">{title}</h3>
-      <a href="#" className="text-xs font-semibold text-gray-400 hover:text-gray-600">All</a>
+      <h3 className="text-sm font-bold text-gray-700 uppercase tracking-tighter">{title}</h3>
+      <a href="#" className="text-sm font-semibold text-gray-400 hover:text-gray-600">All</a>
     </div>
     <div className="space-y-1">
       {items.map(item => <SubredditItem key={item.name + title} subreddit={item} />)}
@@ -88,7 +88,7 @@ const FilterDropdown: React.FC = () => {
 // --- Main App Component ---
 export default function App() {
   return (
-    <div className="flex justify-center items-start min-h-screen bg-gray-200 p-4 font-sans">
+    <div className="flex justify-center items-start min-h-screen">
       <div className="w-full max-w-xs bg-gray-50 rounded-2xl shadow-sm overflow-hidden">
         <FilterDropdown />
         <div className="px-1">

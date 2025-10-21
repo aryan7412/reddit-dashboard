@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  ArrowBigUp,
-  ArrowBigDown,
-  MessageCircle,
-  Share,
+  ChevronUp,
+  ChevronDown,
+  MessageSquare,
+  Share2,
   MoreHorizontal,
 } from "lucide-react";
 import { formatNumber } from "@/lib/format-number"
@@ -89,37 +89,45 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
             {title}
           </h3>
           <div className="text-xs text-gray-500 flex items-center gap-2">
+            <p className="text-gray-500 font-bold">Posted By</p>
             <img
               src="https://www.redditstatic.com/avatars/avatar_default_02_0079D3.png"
               alt="author"
               className="w-5 h-5 rounded-full"
             />
-            <span className="text-gray-700 font-medium">u/{author}</span>
-            <span className="text-gray-400">•</span>
-            <span>{formatDate(created_utc)}</span>
+            <span className="text-gray-700 font-bold tracking-tight">{author}</span>
+            <span className="text-gray-300 font-medium tracking-tight">{formatDate(created_utc)}</span>
           </div>
         </div>
 
         {/* Right Actions */}
-        <div className="flex flex-col items-center justify-center p-4 border-l border-gray-100">
+        <div className="flex flex-col items-center justify-center p-4 border-gray-100">
           <div className="flex items-center gap-2 text-gray-500 mb-2">
-            <MessageCircle className="h-4 w-4" />
+            <MessageSquare className="h-4 w-4" />
             <span className="text-sm">{formatNumber(num_comments)}</span>
           </div>
           <div className="flex items-center gap-2 text-gray-500 mb-2">
-            <Share className="h-4 w-4" />
+            <Share2 className="h-4 w-4" />
             <span className="text-sm">Share</span>
           </div>
-          <MoreHorizontal className="h-4 w-4 text-gray-400" />
+          <div className="flex items-center gap-2 text-gray-500 mb-2">
+            <MoreHorizontal className="h-4 w-4 text-gray-400" />
+            <span className="text-sm">More</span>
+          </div>
+
         </div>
 
         {/* Vote Panel */}
-        <div className="w-16 border-l border-gray-100 flex flex-col items-center justify-center py-4">
-          <ArrowBigUp className="text-orange-500 h-5 w-5 cursor-pointer" />
+        <div className="w-16 border-l border-gray-100 flex flex-col items-center justify-center space-y-2">
+          <div className="bg-[#ff4400]/10 h-[1.35rem] w-10 rounded-xs">
+            <ChevronUp className="text-[#ff4400] h-5 w-5 cursor-pointer mx-auto my-auto" strokeWidth={2.5} />
+          </div>
           <span className="font-semibold text-gray-700 text-sm">
             {formatNumber(score)}
           </span>
-          <ArrowBigDown className="text-gray-400 h-5 w-5 cursor-pointer" />
+          <div className="bg-[#ff4400]/10 h-[1.35rem] w-10 rounded-xs">
+            <ChevronDown className="text-[#ff4400] h-5 w-5 cursor-pointer mx-auto my-auto" strokeWidth={2.5} />
+          </div>
         </div>
       </div>
     </div>
@@ -156,7 +164,7 @@ const RedditPostCardList: React.FC = () => {
   const filters: typeof sort[] = ["hot", "new", "controversial", "rising", "top"];
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-4">
+    <div className="max-w-4xl mx-auto p-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-gray-800">Popular</h2>
@@ -165,11 +173,10 @@ const RedditPostCardList: React.FC = () => {
             <button
               key={f}
               onClick={() => setSort(f)}
-              className={`px-3 py-1 text-sm rounded-md transition-all ${
-                sort === f
-                  ? "bg-gray-100 font-semibold text-gray-800"
-                  : "text-gray-500 hover:bg-gray-50"
-              }`}
+              className={`px-3 py-1 text-sm rounded-md transition-all ${sort === f
+                ? "bg-gray-100 font-semibold text-gray-800"
+                : "text-gray-500 hover:bg-gray-50"
+                }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
@@ -179,7 +186,18 @@ const RedditPostCardList: React.FC = () => {
 
       {/* Posts */}
       {isLoading ? (
-        <p className="text-center p-8 text-gray-500">Loading...</p>
+        <div className="flex h-screen w-full items-center justify-center">
+        <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="flex w-40 h-40 object-cover"
+      >
+        <source src="/Reddit-Loader.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      </div>
       ) : (
         posts.map((post) => <PostCard key={post.id} post={post} />)
       )}
