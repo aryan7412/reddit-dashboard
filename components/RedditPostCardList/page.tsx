@@ -11,7 +11,9 @@ import {
 import { formatNumber } from "@/lib/format-number";
 import { formatDate } from "@/lib/format-date";
 
-interface RedditPostData {
+// --- TYPES ---
+
+export interface RedditPostData {
   id: string;
   title: string;
   author: string;
@@ -34,6 +36,22 @@ interface RedditPostData {
   };
 }
 
+interface RedditChild {
+  data: RedditPostData;
+}
+
+interface RedditAPIData {
+  children: RedditChild[];
+  after: string | null;
+  before: string | null;
+}
+
+interface RedditAPIResponse {
+  data: RedditAPIData;
+}
+
+// --- POST CARD COMPONENT ---
+
 const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
   const {
     title,
@@ -47,7 +65,6 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
     preview,
   } = post;
 
-  // Determine which image/video to display
   const imageUrl =
     (thumbnail && thumbnail.startsWith("http") && thumbnail) ||
     (preview?.images?.[0]?.source?.url?.replace(/&amp;/g, "&")) ||
@@ -141,7 +158,8 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
   );
 };
 
-// ---- Main Component: Fetch + Render ----
+// --- MAIN COMPONENT ---
+
 const RedditPostCardList: React.FC = () => {
   const [posts, setPosts] = useState<RedditPostData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -149,17 +167,16 @@ const RedditPostCardList: React.FC = () => {
     "hot" | "new" | "controversial" | "rising" | "top"
   >("hot");
 
-  // --- ADDED --- Pagination state
   const [after, setAfter] = useState<string | null>(null);
   const [before, setBefore] = useState<string | null>(null);
   const [count, setCount] = useState<number>(0);
 
-  // --- MODIFIED --- fetchPosts to handle pagination
   const fetchPosts = async (
     selectedSort: typeof sort,
     direction: "next" | "prev" | "new" = "new"
   ) => {
     setIsLoading(true);
+
     let url = `https://www.reddit.com/r/popular/${selectedSort}.json?limit=6`;
 
     if (direction === "new") {
@@ -167,31 +184,24 @@ const RedditPostCardList: React.FC = () => {
     } else if (direction === "next" && after) {
       url += `&after=${after}&count=${count}`;
     } else if (direction === "prev" && before) {
-      // --- THIS IS THE FIX ---
-      // We must send the *current count* along with the 'before' token.
-      // The count update logic will subtract the new posts length later.
       url += `&before=${before}&count=${count}`;
-      // --- END OF FIX ---
     }
 
     try {
       const res = await fetch(url);
-      const data = await res.json();
-      const newPosts = data.data.children.map((p: any) => p.data);
-      setPosts(newPosts);
+      const data: RedditAPIResponse = await res.json();
 
-      // --- ADDED --- Set new pagination markers
+      const newPosts: RedditPostData[] = data.data.children.map((p) => p.data);
+
+      setPosts(newPosts);
       setAfter(data.data.after);
       setBefore(data.data.before);
 
-      // --- ADDED --- Update our local item count
       if (direction === "new") {
         setCount(newPosts.length);
       } else if (direction === "next") {
         setCount((prevCount) => prevCount + newPosts.length);
       } else if (direction === "prev") {
-        // This logic is correct. It sets the count back to what it was
-        // on the previous page.
         setCount((prevCount) => Math.max(0, prevCount - newPosts.length));
       }
     } catch (err) {
@@ -201,7 +211,6 @@ const RedditPostCardList: React.FC = () => {
     }
   };
 
-  // --- MODIFIED --- useEffect to call fetchPosts with "new" direction
   useEffect(() => {
     fetchPosts(sort, "new");
   }, [sort]);
@@ -218,10 +227,11 @@ const RedditPostCardList: React.FC = () => {
             <button
               key={f}
               onClick={() => setSort(f)}
-              className={`px-3 py-1 text-sm rounded-md transition-all ${sort === f
+              className={`px-3 py-1 text-sm rounded-md transition-all ${
+                sort === f
                   ? "bg-gray-100 font-semibold text-gray-800"
                   : "text-gray-500 hover:bg-gray-50"
-                }`}
+              }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
@@ -247,7 +257,7 @@ const RedditPostCardList: React.FC = () => {
         posts.map((post) => <PostCard key={post.id} post={post} />)
       )}
 
-      {/* --- ADDED --- Pagination Buttons */}
+      {/* Pagination */}
       {!isLoading && posts.length > 0 && (
         <div className="flex justify-between items-center mt-6 mb-10">
           <button
@@ -259,7 +269,6 @@ const RedditPostCardList: React.FC = () => {
           </button>
 
           <span className="text-sm text-gray-500">
-            {/* Show an approximate page number */}
             Page {Math.max(1, Math.ceil(count / 6))}
           </span>
 
