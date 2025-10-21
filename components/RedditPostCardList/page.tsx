@@ -8,8 +8,8 @@ import {
   Share2,
   MoreHorizontal,
 } from "lucide-react";
-import { formatNumber } from "@/lib/format-number"
-import { formatDate } from "@/lib/format-date"
+import { formatNumber } from "@/lib/format-number";
+import { formatDate } from "@/lib/format-date";
 
 interface RedditPostData {
   id: string;
@@ -96,7 +96,9 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
               className="w-5 h-5 rounded-full"
             />
             <span className="text-gray-700 font-bold tracking-tight">{author}</span>
-            <span className="text-gray-300 font-medium tracking-tight">{formatDate(created_utc)}</span>
+            <span className="text-gray-300 font-medium tracking-tight">
+              {formatDate(created_utc)}
+            </span>
           </div>
         </div>
 
@@ -114,19 +116,24 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
             <MoreHorizontal className="h-4 w-4 text-gray-400" />
             <span className="text-sm">More</span>
           </div>
-
         </div>
 
         {/* Vote Panel */}
         <div className="w-16 border-l border-gray-100 flex flex-col items-center justify-center space-y-2">
-          <div className="bg-[#ff4400]/10 h-[1.35rem] w-10 rounded-xs">
-            <ChevronUp className="text-[#ff4400] h-5 w-5 cursor-pointer mx-auto my-auto" strokeWidth={2.5} />
+          <div className="bg-[#ff4400]/10 h-[1.35rem] w-10 rounded-sm">
+            <ChevronUp
+              className="text-[#ff4400] h-5 w-5 cursor-pointer mx-auto my-auto"
+              strokeWidth={2.5}
+            />
           </div>
           <span className="font-semibold text-gray-700 text-sm">
             {formatNumber(score)}
           </span>
-          <div className="bg-[#ff4400]/10 h-[1.35rem] w-10 rounded-xs">
-            <ChevronDown className="text-[#ff4400] h-5 w-5 cursor-pointer mx-auto my-auto" strokeWidth={2.5} />
+          <div className="bg-[#ff4400]/10 h-[1.35rem] w-10 rounded-sm">
+            <ChevronDown
+              className="text-[#ff4400] h-5 w-5 cursor-pointer mx-auto my-auto"
+              strokeWidth={2.5}
+            />
           </div>
         </div>
       </div>
@@ -142,14 +149,51 @@ const RedditPostCardList: React.FC = () => {
     "hot" | "new" | "controversial" | "rising" | "top"
   >("hot");
 
-  const fetchPosts = async (selectedSort: typeof sort) => {
+  // --- ADDED --- Pagination state
+  const [after, setAfter] = useState<string | null>(null);
+  const [before, setBefore] = useState<string | null>(null);
+  const [count, setCount] = useState<number>(0);
+
+  // --- MODIFIED --- fetchPosts to handle pagination
+  const fetchPosts = async (
+    selectedSort: typeof sort,
+    direction: "next" | "prev" | "new" = "new"
+  ) => {
     setIsLoading(true);
+    let url = `https://www.reddit.com/r/popular/${selectedSort}.json?limit=6`;
+
+    if (direction === "new") {
+      url += `&count=0`;
+    } else if (direction === "next" && after) {
+      url += `&after=${after}&count=${count}`;
+    } else if (direction === "prev" && before) {
+      // --- THIS IS THE FIX ---
+      // We must send the *current count* along with the 'before' token.
+      // The count update logic will subtract the new posts length later.
+      url += `&before=${before}&count=${count}`;
+      // --- END OF FIX ---
+    }
+
     try {
-      const res = await fetch(
-        `https://www.reddit.com/r/popular/${selectedSort}.json?limit=6`
-      );
+      const res = await fetch(url);
       const data = await res.json();
-      setPosts(data.data.children.map((p: any) => p.data));
+      const newPosts = data.data.children.map((p: any) => p.data);
+      setPosts(newPosts);
+
+      // --- ADDED --- Set new pagination markers
+      setAfter(data.data.after);
+      setBefore(data.data.before);
+
+      // --- ADDED --- Update our local item count
+      if (direction === "new") {
+        setCount(newPosts.length);
+      } else if (direction === "next") {
+        setCount((prevCount) => prevCount + newPosts.length);
+      } else if (direction === "prev") {
+        // This logic is correct. It sets the count back to what it was
+        // on the previous page.
+        setCount((prevCount) => Math.max(0, prevCount - newPosts.length));
+      }
     } catch (err) {
       console.error("Failed to load posts:", err);
     } finally {
@@ -157,14 +201,15 @@ const RedditPostCardList: React.FC = () => {
     }
   };
 
+  // --- MODIFIED --- useEffect to call fetchPosts with "new" direction
   useEffect(() => {
-    fetchPosts(sort);
+    fetchPosts(sort, "new");
   }, [sort]);
 
   const filters: typeof sort[] = ["hot", "new", "controversial", "rising", "top"];
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <div className="max-w-4xl mx-auto px-4 pt-2">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-gray-800">Popular</h2>
@@ -174,8 +219,8 @@ const RedditPostCardList: React.FC = () => {
               key={f}
               onClick={() => setSort(f)}
               className={`px-3 py-1 text-sm rounded-md transition-all ${sort === f
-                ? "bg-gray-100 font-semibold text-gray-800"
-                : "text-gray-500 hover:bg-gray-50"
+                  ? "bg-gray-100 font-semibold text-gray-800"
+                  : "text-gray-500 hover:bg-gray-50"
                 }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -187,19 +232,45 @@ const RedditPostCardList: React.FC = () => {
       {/* Posts */}
       {isLoading ? (
         <div className="flex h-screen w-full items-center justify-center">
-        <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="flex w-40 h-40 object-cover"
-      >
-        <source src="/Reddit-Loader.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-      </div>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="flex w-40 h-40 object-cover"
+          >
+            <source src="/Reddit-Loader.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
       ) : (
         posts.map((post) => <PostCard key={post.id} post={post} />)
+      )}
+
+      {/* --- ADDED --- Pagination Buttons */}
+      {!isLoading && posts.length > 0 && (
+        <div className="flex justify-between items-center mt-6 mb-10">
+          <button
+            onClick={() => fetchPosts(sort, "prev")}
+            disabled={!before}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Previous
+          </button>
+
+          <span className="text-sm text-gray-500">
+            {/* Show an approximate page number */}
+            Page {Math.max(1, Math.ceil(count / 6))}
+          </span>
+
+          <button
+            onClick={() => fetchPosts(sort, "next")}
+            disabled={!after}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next
+          </button>
+        </div>
       )}
     </div>
   );

@@ -24,7 +24,7 @@ export default function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="flex items-center gap-2 cursor-pointer">
+        <div className="flex items-center gap-2 cursor-pointer" suppressHydrationWarning>
           <Avatar>
             <AvatarImage src={userImage} alt={userName} />
             <AvatarFallback>{userInitial}</AvatarFallback>

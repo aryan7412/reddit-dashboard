@@ -89,7 +89,7 @@ const FilterDropdown: React.FC = () => {
 export default function App() {
   return (
     <div className="flex justify-center items-start min-h-screen">
-      <div className="w-full max-w-xs bg-gray-50 rounded-2xl shadow-sm overflow-hidden">
+      <div className="w-full max-w-xs overflow-hidden">
         <FilterDropdown />
         <div className="px-1">
             <FilterSection title="Favorites" items={favorites} />

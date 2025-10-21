@@ -13,7 +13,7 @@ const mainLinks = [
 
 const page = () => {
     return (
-        <div className='bg-gray-100'>
+        <div className='bg-gray-50'>
             {/* Card1- About Sale */}
             <div className=''>
                 <Image
@@ -27,12 +27,12 @@ const page = () => {
             {/* Advertise */}
             <div className='mt-5 relative bg-white h-48 w-60 mx-auto'>
                 <div className='flex gap-28 absolute translate-z-5'>
-                    <div><PiDotsNineThin className='text-gray-100 h-15 w-15' strokeWidth={4} /></div>
+                    <div><PiDotsNineThin className='text-gray-50 h-15 w-15' strokeWidth={4} /></div>
                 </div>
 
                 {/* Moved Circle to top-right */}
                 <div className="absolute -top-10 -right-7 translate-z-10">
-                    <Circle className="text-gray-100 h-25 w-25" strokeWidth={1.5} />
+                    <Circle className="text-gray-50 h-25 w-25" strokeWidth={1.5} />
                 </div>
 
                 <div className="flex items-center gap-2 translate-y-9.5 translate-x-16">
