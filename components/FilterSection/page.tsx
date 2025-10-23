@@ -59,7 +59,34 @@ const FilterSection: React.FC<{ title: string; items: Subreddit[] }> = ({ title,
 );
 
 // Dropdown Component
-const FilterDropdown: React.FC = () => {
+const FilterDropdown: React.FC<{ isOpen: boolean; onToggle: () => void }> = ({ isOpen, onToggle }) => {
+  return (
+    <div className="relative px-3 py-4">
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center justify-between bg-card border border-border rounded-lg px-4 py-3 text-left text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+      >
+        <span>Filter by</span>
+        <svg
+          className={`w-5 h-5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+    </div>
+  );
+};
+
+
+export default function App() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  
+  const FilterNormal: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -83,19 +110,33 @@ const FilterDropdown: React.FC = () => {
         </div>
     );
 };
+  const sections = (
+    <div className="px-1">
+      <div className='hidden lg:block'>
+      <FilterNormal />
+
+      </div>
+      <FilterSection title="Favorites" items={favorites} />
+      <hr className="border-border mx-3"/>
+      <FilterSection title="Reddit Feeds" items={redditFeeds} />
+      <hr className="border-border mx-3"/>
+      <FilterSection title="Community" items={community} />
+    </div>
+  );
 
 
-export default function App() {
   return (
     <div className="flex justify-center items-start min-h-full">
       <div className="w-full max-w-xs overflow-hidden">
-        <FilterDropdown />
-        <div className="px-1">
-            <FilterSection title="Favorites" items={favorites} />
-            <hr className="border-border mx-3"/>
-            <FilterSection title="Reddit Feeds" items={redditFeeds} />
-            <hr className="border-border mx-3"/>
-            <FilterSection title="Community" items={community} />
+        {/* Mobile: Dropdown + conditional sections */}
+        <div className="lg:hidden">
+          <FilterDropdown isOpen={isOpen} onToggle={() => setIsOpen((v) => !v)} />
+          {isOpen && sections}
+        </div>
+
+        {/* Desktop: Always show sections, hide dropdown */}
+        <div className="hidden lg:block">
+          {sections}
         </div>
       </div>
     </div>
