@@ -63,7 +63,7 @@ const Navbar = () => {
                     </div>
 
                     {/* Search Bar */}
-                    <SearchBar /> 
+                    <SearchBar />
 
                     {/* Create Post */}
                     <Button className="bg-[#ff4400] hover:bg-[#e53e00] text-white h-8 rounded-md px-3">
@@ -103,41 +103,50 @@ const Navbar = () => {
                     </div>
                 </div>
             </div>
-            {/* Mobile / Tablet Dropdown */}
+            {/* Mobile / Tablet Dropdown - MODIFIED */}
             {menuOpen && (
                 <div className="lg:hidden flex flex-col items-center gap-4 py-4 border-t animate-in fade-in duration-200">
-                    <div className="flex flex-col items-center gap-4 text-sm font-medium">
-                        <div className="flex items-center gap-1 cursor-pointer hover:opacity-80">
-                            <Home className="h-5 w-5" />
-                            <p className="mt-1">Home</p>
-                        </div>
-
-                        <div className="flex items-center cursor-pointer">
-                            <div className="flex items-center text-[#ff4400]">
-                                <Tally1 className="h-2 mt-[0.45rem]" strokeWidth={7} />
-                                <Tally1 className="h-3 mt-[0.32rem] -ml-[1.12rem]" strokeWidth={5} />
-                                <MoveUp className="h-4 -ml-[1.43rem]" strokeWidth={4} />
+                    <div className="flex flex-col items-center gap-4 text-sm font-medium w-full">
+                        {/* 1. Home, Popular, All on one line */}
+                        <div className="flex justify-center gap-8 px-6 w-full">
+                            <div className="flex items-center gap-1 cursor-pointer hover:opacity-80">
+                                <Home className="h-5 w-5" />
+                                <p className="mt-1">Home</p>
                             </div>
-                            <p className="text-[#ff4400] font-bold mt-1 -ml-1">Popular</p>
-                        </div>
 
-                        <div className="flex items-center cursor-pointer">
-                            <div className="flex items-center">
-                                <Tally1 className="h-[0.7rem] mt-[0.32rem]" strokeWidth={6} />
-                                <MoveUp className="h-4 -ml-[1.4475rem] mt-[0.06rem]" strokeWidth={4} />
-                                <Tally1 className="h-[0.7rem] -ml-[1.01rem] mt-[0.32rem]" strokeWidth={6} />
+                            <div className="flex items-center cursor-pointer">
+                                <div className="flex items-center text-[#ff4400]">
+                                    <Tally1 className="h-2 mt-[0.45rem]" strokeWidth={7} />
+                                    <Tally1 className="h-3 mt-[0.3125rem] -ml-[1.12rem]" strokeWidth={5} />
+                                    <MoveUp className="h-4 -ml-[1.43rem]" strokeWidth={4} />
+                                </div>
+                                <p className="text-[#ff4400] font-bold mt-1 -ml-1">Popular</p>
                             </div>
-                            <p className="mt-1 -ml-1.5">All</p>
+
+                            <div className="flex items-center cursor-pointer">
+                                <div className="flex items-center">
+                                    <Tally1 className="h-[0.7rem] mt-[0.32rem]" strokeWidth={6} />
+                                    <MoveUp className="h-4 -ml-[1.4475rem] mt-[0.06rem]" strokeWidth={4} />
+                                    <Tally1 className="h-[0.7rem] -ml-[1.01rem] mt-[0.32rem]" strokeWidth={6} />
+                                </div>
+                                <p className="mt-1 -ml-1.5">All</p>
+                            </div>
                         </div>
 
-                        <Input placeholder="Find community or post" className="h-8 w-[80%]" />
+                        {/* 2. Centered Search Bar */}
+                        <SearchBar />
 
-                        <Button className="bg-[#ff4400] hover:bg-[#e53e00] text-white h-8 rounded-md px-3">
+                        {/* 3. Create Post Button */}
+                        <Button className="bg-[#ff4400] hover:bg-[#e53e00] text-white h-8 rounded-md px-3 w-[90%] sm:w-[80%]">
                             Create Post
                         </Button>
 
-                        <div className="flex items-center gap-4">
-                            <MessageSquare size={20} />
+                        {/* 4. Icons in one line (centered by parent container) */}
+                        <div className="flex items-center gap-8 mt-2">
+                            <div className="relative cursor-pointer lg:hidden">
+                                <MessageSquare size={20} />
+                                <span className="absolute top-0 left-0 w-3 h-3 bg-[#ff4400] border-2 border-white rounded-full -translate-x-1/4 -translate-y-1/4"></span>
+                            </div>
                             <Mail className="h-5 w-5" />
                             <UserMenu />
                         </div>

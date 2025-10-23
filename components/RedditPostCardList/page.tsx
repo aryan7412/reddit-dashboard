@@ -74,10 +74,14 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
       : null;
 
   return (
-    <div className="bg-card border border-border rounded-sm mb-3 sm:mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between hover:shadow-sm transition-all">
-      <div className="flex flex-row sm:flex-row items-center sm:items-center gap-3 sm:gap-4 w-full">
-        {/* Thumbnail */}
-        <div className="p-3 sm:p-4 shrink-0">
+    // 1. Base (Mobile): Stacked (flex-col). SM and up: Side-by-side (sm:flex-row)
+    <div className="bg-card border border-border rounded-sm mb-3 sm:mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between hover:shadow-sm transition-all overflow-hidden">
+
+      {/* Container for Image + Info - Base (Mobile): Stacked. SM and up: Side-by-side (sm:flex-row) */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-0 sm:gap-4 w-full">
+
+        {/* 2. Thumbnail Section - Only visible on SM and up */}
+        <div className="hidden sm:block p-3 sm:p-4 shrink-0">
           <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-sm overflow-hidden bg-muted flex items-center justify-center">
             {videoUrl ? (
               <video
@@ -94,21 +98,58 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
               />
             ) : (
               <Image
-              src="/reddit_image.png"
-              alt="Reddit-Placeholder"
-              height={100}
-              width={100}/>
+                src="/reddit_image.png"
+                alt="Reddit-Placeholder"
+                height={100}
+                width={100} />
             )}
           </div>
         </div>
 
-        {/* Post Info */}
-        <div className="flex-1 py-2 sm:py-4 px-2 sm:px-0">
-          <h3 className="text-xs sm:text-sm md:text-base font-semibold text-foreground mb-1 sm:mb-2">
+        {/* 3. Mobile-Specific Full-Width Media (hidden on sm and up) */}
+        <div className="w-full h-44 bg-muted flex items-center justify-center sm:hidden overflow-hidden"> {/* Corrected the w-full class */}
+          {videoUrl ? (
+            <video
+              src={videoUrl}
+              // Applied h-full and object-contain to media for h-44 constraint
+              className="w-full h-full object-contain"
+              controls
+              muted
+              playsInline
+              loop
+              autoPlay
+            />
+          ) : imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={title}
+              // Applied h-full and object-contain to media for h-44 constraint
+              className="w-full h-full object-contain"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <Image
+                src="/reddit_image.png"
+                alt="Reddit-Placeholder"
+                height={100}
+                width={100}
+              />
+            </div>
+          )}
+        </div>
+
+
+        {/* 4. Post Info - Base (Mobile): Full width, padding. SM and up: smaller padding, flex-1 */}
+        <div className="flex-1 w-full p-3 sm:py-4 sm:px-0">
+
+          {/* Title */}
+          <h3 className="text-sm sm:text-base md:text-lg font-bold text-foreground mb-1 sm:mb-2">
             {title}
           </h3>
 
-          <div className="text-[10px] sm:text-xs text-muted-foreground flex flex-wrap items-center gap-1 sm:gap-2 justify-between">
+          {/* Posted By & Date - Base (Mobile): CHANGED to flex-row. SM and up: flex-row, justify-between */}
+          <div className="text-[10px] sm:text-xs text-muted-foreground flex flex-row sm:flex-row items-center gap-2 sm:gap-2 sm:justify-between">
+            {/* Posted By */}
             <div className="flex items-center gap-1 sm:gap-2">
               <p className="text-muted-foreground font-bold">Posted By</p>
               <Image
@@ -122,13 +163,33 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
                 {author}
               </span>
             </div>
-            <span className="font-medium tracking-tight text-gray-400 mr-2.5">
+            {/* Date - Added a separator and adjusted margin for mobile alignment */}
+            <span className="text-gray-400 mx-1 sm:hidden">|</span>
+            <span className="font-medium tracking-tight text-gray-400 sm:mr-2.5">
               {formatDate(created_utc)}
             </span>
           </div>
+
+          {/* 5. Mobile-Only Action Bar (Comment/Share/More) - Hidden on SM and up */}
+          <div className="flex sm:hidden items-center justify-around py-2 border-y border-border my-2">
+            <div className="flex items-center gap-1 text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+              <MessageSquare className="h-4 w-4" />
+              <span className="text-xs font-medium">
+                {formatNumber(num_comments)} Comments
+              </span>
+            </div>
+            <div className="flex items-center gap-1 text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+              <Share2 className="h-4 w-4" />
+              <span className="text-xs font-medium">Share</span>
+            </div>
+            <div className="flex items-center gap-1 text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+              <MoreHorizontal className="h-4 w-4" />
+              <span className="text-xs font-medium">More</span>
+            </div>
+          </div>
         </div>
 
-        {/* Comment Share */}
+        {/* 6. Desktop-Only Action Bar (Comment/Share/More) - Hidden on mobile, visible on MD and up */}
         <div className="hidden md:flex flex-col items-center justify-center px-3 shrink-0">
           <div className="flex items-center gap-2 text-muted-foreground mb-3">
             <MessageSquare className="h-4 w-4" />
@@ -143,25 +204,28 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
             <span className="text-sm">More</span>
           </div>
         </div>
+      </div>
 
-        {/* Voting */}
-        <div className="w-full sm:w-16 border-t sm:border-t-0 sm:border-l border-border flex sm:flex-col items-center justify-between sm:justify-center space-x-4 sm:space-x-0 sm:space-y-5 p-2 sm:p-0">
-          <div className="bg-[#ff4400]/10 h-[1.5rem] w-8 sm:w-10 rounded-xs flex items-center justify-center">
-            <ChevronUp
-              className="text-[#ff4400] h-4 sm:h-5 w-4 sm:w-5 cursor-pointer"
-              strokeWidth={2.5}
-            />
-          </div>
-          <span className="font-semibold text-foreground text-xs sm:text-sm">
-            {formatNumber(score)}
-          </span>
-          <div className="bg-[#ff4400]/10 h-[1.5rem] w-8 sm:w-10 rounded-xs flex items-center justify-center">
-            <ChevronDown
-              className="text-[#ff4400] h-4 sm:h-5 w-4 sm:w-5 cursor-pointer"
-              strokeWidth={2.5}
-            />
-          </div>
+      <div className="w-full sm:w-16 border-t sm:border-t-0 sm:border-l border-border flex sm:flex-col items-center justify-between sm:justify-center space-x-4 sm:space-x-0 sm:space-y-5 p-2 sm:p-0">
+        <div className="bg-[#ff4400]/10 h-[1.5rem] w-8 sm:w-10 rounded-xs flex items-center justify-center">
+          <ChevronUp
+            className="text-[#ff4400] h-4 sm:h-5 w-4 sm:w-5 cursor-pointer"
+            strokeWidth={2.5}
+          />
         </div>
+        <span className="font-semibold text-foreground text-xs sm:text-sm">
+          {formatNumber(score)}
+        </span>
+        <div className="bg-[#ff4400]/10 h-[1.5rem] w-8 sm:w-10 rounded-xs flex items-center justify-center">
+          <ChevronDown
+            className="text-[#ff4400] h-4 sm:h-5 w-4 sm:w-5 cursor-pointer"
+            strokeWidth={2.5}
+          />
+
+        </div>
+
+        {/* Spacer for desktop vertical layout - now using hidden sm:block */}
+        <div className="hidden sm:block"></div>
       </div>
     </div>
   );
@@ -229,11 +293,10 @@ const RedditPostCardList: React.FC = () => {
             <button
               key={f}
               onClick={() => setSort(f)}
-              className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-xs transition-all ${
-                sort === f
-                  ? "bg-muted font-semibold text-foreground"
-                  : "text-muted-foreground hover:bg-muted"
-              }`}
+              className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-xs transition-all ${sort === f
+                ? "bg-muted font-semibold text-foreground"
+                : "text-muted-foreground hover:bg-muted"
+                }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
