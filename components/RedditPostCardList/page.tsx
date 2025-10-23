@@ -12,7 +12,6 @@ import { formatNumber } from "@/lib/format-number";
 import { formatDate } from "@/lib/format-date";
 
 // --- TYPES ---
-
 export interface RedditPostData {
   id: string;
   title: string;
@@ -50,8 +49,7 @@ interface RedditAPIResponse {
   data: RedditAPIData;
 }
 
-// --- POST CARD COMPONENT ---
-
+// --- POST CARD ---
 const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
   const {
     title,
@@ -76,11 +74,11 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
       : null;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl mb-4 flex items-center justify-between hover:shadow-sm transition-all">
-      <div className="flex items-center gap-4 w-full">
+    <div className="bg-card border border-border rounded-sm mb-3 sm:mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between hover:shadow-sm transition-all">
+      <div className="flex flex-row sm:flex-row items-center sm:items-center gap-3 sm:gap-4 w-full">
         {/* Thumbnail */}
-        <div className="p-4">
-          <div className="w-20 h-20 rounded-md overflow-hidden bg-gray-100 flex items-center justify-center">
+        <div className="p-3 sm:p-4 shrink-0">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-sm overflow-hidden bg-muted flex items-center justify-center">
             {videoUrl ? (
               <video
                 src={videoUrl}
@@ -95,60 +93,65 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="text-gray-400 text-xs">No image</div>
+              <div className="text-muted-foreground text-xs">No image</div>
             )}
           </div>
         </div>
 
         {/* Post Info */}
-        <div className="flex-1 py-4">
-          <h3 className="text-base md:text-lg font-semibold text-gray-800 mb-2">
+        <div className="flex-1 py-2 sm:py-4 px-2 sm:px-0">
+          <h3 className="text-xs sm:text-sm md:text-base font-semibold text-foreground mb-1 sm:mb-2">
             {title}
           </h3>
-          <div className="text-xs text-gray-500 flex items-center gap-2">
-            <p className="text-gray-500 font-bold">Posted By</p>
-            <img
-              src="https://www.redditstatic.com/avatars/avatar_default_02_0079D3.png"
-              alt="author"
-              className="w-5 h-5 rounded-full"
-            />
-            <span className="text-gray-700 font-bold tracking-tight">{author}</span>
-            <span className="text-gray-300 font-medium tracking-tight">
+
+          <div className="text-[10px] sm:text-xs text-muted-foreground flex flex-wrap items-center gap-1 sm:gap-2 justify-between">
+            <div className="flex items-center gap-1 sm:gap-2">
+              <p className="text-muted-foreground font-bold">Posted By</p>
+              <img
+                src="https://www.redditstatic.com/avatars/avatar_default_02_0079D3.png"
+                alt="author"
+                className="w-4 h-4 sm:w-5 sm:h-5 rounded-full"
+              />
+              <span className="text-foreground font-bold tracking-tight truncate max-w-[100px] sm:max-w-none">
+                {author}
+              </span>
+            </div>
+            <span className="font-medium tracking-tight text-gray-400">
               {formatDate(created_utc)}
             </span>
           </div>
         </div>
 
-        {/* Right Actions */}
-        <div className="flex flex-col items-center justify-center p-4 border-gray-100">
-          <div className="flex items-center gap-2 text-gray-500 mb-2">
+        {/* Right Actions (Hidden on small, visible on md+) */}
+        <div className="hidden md:flex flex-col items-center justify-center px-3 shrink-0">
+          <div className="flex items-center gap-2 text-muted-foreground mb-3">
             <MessageSquare className="h-4 w-4" />
-            <span className="text-sm">{formatNumber(num_comments)}</span>
+            <span className="text-sm">{formatNumber(num_comments)} Comments</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-500 mb-2">
+          <div className="flex items-center gap-2 text-muted-foreground mb-3">
             <Share2 className="h-4 w-4" />
             <span className="text-sm">Share</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-500 mb-2">
-            <MoreHorizontal className="h-4 w-4 text-gray-400" />
+          <div className="flex items-center gap-2 text-muted-foreground mb-3">
+            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm">More</span>
           </div>
         </div>
 
         {/* Vote Panel */}
-        <div className="w-16 border-l border-gray-100 flex flex-col items-center justify-center space-y-2">
-          <div className="bg-[#ff4400]/10 h-[1.35rem] w-10 rounded-sm">
+        <div className="w-full sm:w-16 border-t sm:border-t-0 sm:border-l border-border flex sm:flex-col items-center justify-between sm:justify-center space-x-4 sm:space-x-0 sm:space-y-5 p-2 sm:p-0">
+          <div className="bg-[#ff4400]/10 h-[1.5rem] w-8 sm:w-10 rounded-xs flex items-center justify-center">
             <ChevronUp
-              className="text-[#ff4400] h-5 w-5 cursor-pointer mx-auto my-auto"
+              className="text-[#ff4400] h-4 sm:h-5 w-4 sm:w-5 cursor-pointer"
               strokeWidth={2.5}
             />
           </div>
-          <span className="font-semibold text-gray-700 text-sm">
+          <span className="font-semibold text-foreground text-xs sm:text-sm">
             {formatNumber(score)}
           </span>
-          <div className="bg-[#ff4400]/10 h-[1.35rem] w-10 rounded-sm">
+          <div className="bg-[#ff4400]/10 h-[1.5rem] w-8 sm:w-10 rounded-xs flex items-center justify-center">
             <ChevronDown
-              className="text-[#ff4400] h-5 w-5 cursor-pointer mx-auto my-auto"
+              className="text-[#ff4400] h-4 sm:h-5 w-4 sm:w-5 cursor-pointer"
               strokeWidth={2.5}
             />
           </div>
@@ -159,7 +162,6 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
 };
 
 // --- MAIN COMPONENT ---
-
 const RedditPostCardList: React.FC = () => {
   const [posts, setPosts] = useState<RedditPostData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -176,7 +178,6 @@ const RedditPostCardList: React.FC = () => {
     direction: "next" | "prev" | "new" = "new"
   ) => {
     setIsLoading(true);
-
     let url = `https://www.reddit.com/r/popular/${selectedSort}.json?limit=6`;
 
     if (direction === "new") {
@@ -190,24 +191,20 @@ const RedditPostCardList: React.FC = () => {
     try {
       const res = await fetch(url);
       const data: RedditAPIResponse = await res.json();
-
       const newPosts: RedditPostData[] = data.data.children.map((p) => p.data);
 
       setPosts(newPosts);
       setAfter(data.data.after);
       setBefore(data.data.before);
 
-      if (direction === "new") {
-        setCount(newPosts.length);
-      } else if (direction === "next") {
-        setCount((prevCount) => prevCount + newPosts.length);
-      } else if (direction === "prev") {
-        setCount((prevCount) => Math.max(0, prevCount - newPosts.length));
-      }
+      if (direction === "new") setCount(newPosts.length);
+      else if (direction === "next") setCount((c) => c + newPosts.length);
+      else if (direction === "prev") setCount((c) => Math.max(0, c - newPosts.length));
     } catch (err) {
       console.error("Failed to load posts:", err);
     } finally {
       setIsLoading(false);
+      document.querySelector(".post-scroll-container")?.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -218,19 +215,21 @@ const RedditPostCardList: React.FC = () => {
   const filters: typeof sort[] = ["hot", "new", "controversial", "rising", "top"];
 
   return (
-    <div className="max-w-4xl mx-auto px-4 pt-2">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold text-gray-800">Popular</h2>
-        <div className="flex gap-2">
+    <div className="max-w-4xl mx-auto px-2 sm:px-4 relative h-screen flex flex-col">
+      {/* Header (Fixed) */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 bg-background z-20 sticky top-0 py-2 sm:py-3 gap-2 sm:gap-0">
+        <h2 className="text-base sm:text-lg font-semibold text-foreground text-center sm:text-left">
+          Popular
+        </h2>
+        <div className="flex flex-wrap justify-center sm:justify-end gap-2">
           {filters.map((f) => (
             <button
               key={f}
               onClick={() => setSort(f)}
-              className={`px-3 py-1 text-sm rounded-md transition-all ${
+              className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md transition-all ${
                 sort === f
-                  ? "bg-gray-100 font-semibold text-gray-800"
-                  : "text-gray-500 hover:bg-gray-50"
+                  ? "bg-muted font-semibold text-foreground"
+                  : "text-muted-foreground hover:bg-muted"
               }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -239,43 +238,44 @@ const RedditPostCardList: React.FC = () => {
         </div>
       </div>
 
-      {/* Posts */}
-      {isLoading ? (
-        <div className="flex h-screen w-full items-center justify-center">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="flex w-40 h-40 object-cover"
-          >
-            <source src="/Reddit-Loader.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      ) : (
-        posts.map((post) => <PostCard key={post.id} post={post} />)
-      )}
+      {/* Scrollable List */}
+      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent post-scroll-container">
+        {isLoading ? (
+          <div className="flex min-h-[40vh] w-full items-center justify-center">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="flex w-20 h-20 sm:w-24 sm:h-24 md:w-40 md:h-40 object-cover"
+            >
+              <source src="/Reddit-Loader.mp4" type="video/mp4" />
+            </video>
+          </div>
+        ) : (
+          posts.map((post) => <PostCard key={post.id} post={post} />)
+        )}
+      </div>
 
-      {/* Pagination */}
+      {/* Pagination (Fixed bottom) */}
       {!isLoading && posts.length > 0 && (
-        <div className="flex justify-between items-center mt-6 mb-10">
+        <div className="flex flex-col sm:flex-row justify-between items-center bg-background py-2 sm:py-3 sticky bottom-0 z-20 gap-2 sm:gap-0">
           <button
             onClick={() => fetchPosts(sort, "prev")}
             disabled={!before}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-foreground bg-card border border-border rounded-md shadow-sm hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
           >
             Previous
           </button>
 
-          <span className="text-sm text-gray-500">
+          <span className="text-xs sm:text-sm text-muted-foreground">
             Page {Math.max(1, Math.ceil(count / 6))}
           </span>
 
           <button
             onClick={() => fetchPosts(sort, "next")}
             disabled={!after}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-foreground bg-card border border-border rounded-md shadow-sm hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
           >
             Next
           </button>

@@ -13,6 +13,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+ 
+
 export const metadata: Metadata = {
   title: "Reddit",
   description: "A Reddit-style community platform and discussion forum built with Next.js. Join communities, share content, and vote on posts.",

@@ -32,13 +32,13 @@ const community: Subreddit[] = [
 
 // Subreddit Item Component
 const SubredditItem: React.FC<{ subreddit: Subreddit }> = ({ subreddit }) => (
-  <a href="#" className="flex items-center justify-between py-1.25 px-3 rounded-lg hover:bg-gray-200 transition-colors duration-150">
+  <a href="#" className="flex items-center justify-between py-1.25 px-3 rounded-lg hover:bg-muted transition-colors duration-150">
     <div className="flex items-center space-x-3">
       <img src={subreddit.avatar} alt={`${subreddit.name} avatar`} className="w-7 h-7 rounded-full object-cover" />
-      <span className="font-medium text-gray-500 text-sm">{subreddit.name}</span>
+      <span className="font-medium text-muted-foreground text-sm">{subreddit.name}</span>
     </div>
     {subreddit.count > 0 && (
-      <span className="bg-gray-200 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">
+      <span className="bg-muted text-muted-foreground text-xs font-bold px-2.5 py-1 rounded-full">
         {subreddit.count.toString().padStart(2, '0')}
       </span>
     )}
@@ -49,8 +49,8 @@ const SubredditItem: React.FC<{ subreddit: Subreddit }> = ({ subreddit }) => (
 const FilterSection: React.FC<{ title: string; items: Subreddit[] }> = ({ title, items }) => (
   <div className="py-4">
     <div className="flex justify-between items-center px-3 mb-2">
-      <h3 className="text-sm font-bold text-gray-700 uppercase tracking-tighter">{title}</h3>
-      <a href="#" className="text-sm font-semibold text-gray-400 hover:text-gray-600">All</a>
+      <h3 className="text-sm font-bold text-foreground uppercase tracking-tighter">{title}</h3>
+      <a href="#" className="text-sm font-semibold text-muted-foreground hover:text-foreground">All</a>
     </div>
     <div className="space-y-1">
       {items.map(item => <SubredditItem key={item.name + title} subreddit={item} />)}
@@ -66,7 +66,7 @@ const FilterDropdown: React.FC = () => {
         <div className="relative px-3 py-4">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between bg-white border border-gray-200 rounded-lg px-4 py-3 text-left text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full flex items-center justify-between bg-card border border-border rounded-lg px-4 py-3 text-left text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             >
                 <span>Filter by</span>
                 <svg
@@ -88,14 +88,14 @@ const FilterDropdown: React.FC = () => {
 // --- Main App Component ---
 export default function App() {
   return (
-    <div className="flex justify-center items-start min-h-screen">
+    <div className="flex justify-center items-start min-h-full">
       <div className="w-full max-w-xs overflow-hidden">
         <FilterDropdown />
         <div className="px-1">
             <FilterSection title="Favorites" items={favorites} />
-            <hr className="border-gray-200 mx-3"/>
+            <hr className="border-border mx-3"/>
             <FilterSection title="Reddit Feeds" items={redditFeeds} />
-            <hr className="border-gray-200 mx-3"/>
+            <hr className="border-border mx-3"/>
             <FilterSection title="Community" items={community} />
         </div>
       </div>

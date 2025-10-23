@@ -13,7 +13,7 @@ const mainLinks = [
 
 const page = () => {
     return (
-        <div className='bg-gray-50'>
+        <div className='bg-transparent'>
             {/* Card1- About Sale */}
             <div className=''>
                 <Image
@@ -21,23 +21,23 @@ const page = () => {
                     alt='Sale Image'
                     height={150}
                     width={250}
-                    className='pt-5 mx-auto h-[13rem] w-[15rem]'
+                    className='pt-5 mx-auto h-52 w-60 md:h-56 md:w-64'
                 />
             </div>
             {/* Advertise */}
-            <div className='mt-5 relative bg-white h-48 w-60 mx-auto'>
+            <div className='mt-5 relative bg-card border h-46 w-full max-w-[15rem] mx-auto overflow-hidden'>
                 <div className='flex gap-28 absolute translate-z-5'>
-                    <div><PiDotsNineThin className='text-gray-50 h-15 w-15' strokeWidth={4} /></div>
+                    <div><PiDotsNineThin className='text-muted h-15 w-15' strokeWidth={4} /></div>
                 </div>
 
                 {/* Moved Circle to top-right */}
                 <div className="absolute -top-10 -right-7 translate-z-10">
-                    <Circle className="text-gray-50 h-25 w-25" strokeWidth={1.5} />
+                    <Circle className="text-muted h-25 w-25" strokeWidth={1.5} />
                 </div>
 
                 <div className="flex items-center gap-2 translate-y-9.5 translate-x-16">
                     <FaReddit color="#ff4400" className="h-8 w-8" />
-                    <span className="text-[1.75rem] font-bold tracking-tighter">
+                    <span className="text-[1.75rem] font-bold tracking-tighter text-foreground">
                         <span>redd</span>
                         <span className="relative">
                             i
@@ -50,31 +50,30 @@ const page = () => {
                     </span>
                 </div>
 
-                <div className='translate-x-13 translate-y-10'>Advertise on Reddit</div>
-                <button className="translate-x-6 translate-y-14 text-[#ff4400] font-bold text-sm py-2 px-14 rounded-sm border-2 border-[#ff4400] transition-all duration-300 ease-in-out hover:bg-[#ff4400] hover:text-white cursor-pointer">
+                <div className='translate-x-13 translate-y-10 text-foreground'>Advertise on Reddit</div>
+                <button className="translate-x-6 translate-y-14 text-[#ff4400] font-bold text-sm py-2 px-10 rounded-sm border-2 border-[#ff4400] transition-all duration-300 ease-in-out hover:bg-[#ff4400] hover:text-white cursor-pointer">
                     GET STARTED
                 </button>
             </div>
 
             {/* Footer */}
-            {/* remove the mt */}
-            <div className="rounded-lg max-w-md w-68 mt-45 mx-auto">
+            <div className="rounded-lg max-w-md w-full mt-36 mx-auto">
                 {/* Grid for the main navigation links */}
-                <hr className='mb-4' />
-                <ul className="grid grid-cols-3 -gap-x-[0.3rem] gap-y-4 mb-4">
+                <hr className='mb-4 border-border' />
+                <ul className="grid grid-cols-3 gap-y-4 mb-4">
                     {mainLinks.map((link, index) => (
-                        <li key={index} className="flex items-center text-[0.825rem]">
+                        <li key={index} className="flex items-center text-[0.772rem]">
                             {/* The bullet point before each link */}
-                            <span className="text-slate-400 mr-2">•</span>
-                            <a href="#" className="text-slate-700 hover:underline">
+                            <span className="text-muted-foreground mr-1">•</span>
+                            <a href="#" className="text-foreground hover:underline">
                                 {link}
                             </a>
                         </li>
                     ))}
                 </ul>
-                <hr className='mb-4' />
+                <hr className='mb-4 border-border' />
                 {/* Bottom section for copyright and legal links */}
-                <div className="flex justify-between items-center text-sm text-slate-600 font-medium">
+                <div className="flex justify-between items-center text-[0.8rem] text-muted-foreground font-medium">
                     <p>&copy; 2020</p>
                     <div className="flex items-center space-x-4">
                         <a href="#" className="hover:underline">Privacy</a>

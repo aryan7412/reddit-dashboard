@@ -8,13 +8,18 @@ const page = () => {
   return (
     <div className='overflow-hidden'>
       <Navbar /> 
-      <div className='flex mx-2.5 gap-2.5 bg-gray-50'>
-        <div className='h-full w-[20.3125rem]'><FilterSection /></div>
-        <div className='h-full w-[59.375rem] rounded-2xl bg-white mt-4'><RedditPostCardList /></div>
-        <div className='h-full w-[20.3125rem]'><AdvertisementSection /></div>
+      <div className='mx-auto max-w-screen-2xl px-1 sm:px-3 lg:px-4'>
+        <div className='flex flex-col lg:flex-row'>
+          {/* Left sidebar (filters) */}
+          <div className='hidden lg:block lg:w-64 xl:w-90 2xl:w-80'><FilterSection /></div>
+
+          {/* Main content */}
+          <div className='w-full rounded-2xl bg-card mt-4'><RedditPostCardList /></div>
+
+          {/* Right sidebar (ads) */}
+          <div className='hidden xl:block xl:w-88 2xl:w-72'><AdvertisementSection /></div>
+        </div>
       </div>
-      
-      
     </div>
   )
 }
