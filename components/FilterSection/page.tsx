@@ -9,7 +9,7 @@ interface Subreddit {
 }
 
 const favorites: Subreddit[] = [
-  { name: 'r/funymore', avatar: 'https://placehold.co/32x32/FFDDC1/8B5CF6?text=F', count: 156 },
+  { name: 'r/funymore', avatar: 'https://placehold.co/32x32/FFDDC1/8B5CF6?text=F', count: 56 },
   { name: 'r/breadkingnews', avatar: 'https://placehold.co/32x32/E0E7FF/4F46E5?text=B', count: 12 },
   { name: 'r/lovestory', avatar: 'https://placehold.co/32x32/FEE2E2/DC2626?text=L', count: 0 },
   { name: 'r/gamingfun', avatar: 'https://placehold.co/32x32/D1FAE5/059669?text=G', count: 8 },
@@ -38,7 +38,7 @@ const SubredditItem: React.FC<{ subreddit: Subreddit }> = ({ subreddit }) => (
       <span className="font-medium text-muted-foreground text-sm">{subreddit.name}</span>
     </div>
     {subreddit.count > 0 && (
-      <span className="bg-muted text-muted-foreground text-xs font-bold px-2.5 py-1 rounded-full">
+      <span className="bg-muted text-muted-foreground text-xs font-bold px-2.5 py-1 rounded-full ">
         {subreddit.count.toString().padStart(2, '0')}
       </span>
     )}
@@ -50,7 +50,7 @@ const FilterSection: React.FC<{ title: string; items: Subreddit[] }> = ({ title,
   <div className="py-4">
     <div className="flex justify-between items-center px-3 mb-2">
       <h3 className="text-sm font-bold text-foreground uppercase tracking-tighter">{title}</h3>
-      <a href="#" className="text-sm font-semibold text-muted-foreground hover:text-foreground">All</a>
+      <a href="#" className="text-sm font-semibold text-muted-foreground hover:text-foreground px-3">All</a>
     </div>
     <div className="space-y-1">
       {items.map(item => <SubredditItem key={item.name + title} subreddit={item} />)}
@@ -85,7 +85,6 @@ const FilterDropdown: React.FC = () => {
 };
 
 
-// --- Main App Component ---
 export default function App() {
   return (
     <div className="flex justify-center items-start min-h-full">

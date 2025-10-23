@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   ChevronUp,
   ChevronDown,
@@ -10,8 +11,8 @@ import {
 } from "lucide-react";
 import { formatNumber } from "@/lib/format-number";
 import { formatDate } from "@/lib/format-date";
+import Image from "next/image";
 
-// --- TYPES ---
 export interface RedditPostData {
   id: string;
   title: string;
@@ -49,7 +50,6 @@ interface RedditAPIResponse {
   data: RedditAPIData;
 }
 
-// --- POST CARD ---
 const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
   const {
     title,
@@ -93,7 +93,11 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="text-muted-foreground text-xs">No image</div>
+              <Image
+              src="/reddit_image.png"
+              alt="Reddit-Placeholder"
+              height={100}
+              width={100}/>
             )}
           </div>
         </div>
@@ -107,22 +111,24 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
           <div className="text-[10px] sm:text-xs text-muted-foreground flex flex-wrap items-center gap-1 sm:gap-2 justify-between">
             <div className="flex items-center gap-1 sm:gap-2">
               <p className="text-muted-foreground font-bold">Posted By</p>
-              <img
+              <Image
                 src="https://www.redditstatic.com/avatars/avatar_default_02_0079D3.png"
                 alt="author"
+                height={100}
+                width={100}
                 className="w-4 h-4 sm:w-5 sm:h-5 rounded-full"
               />
               <span className="text-foreground font-bold tracking-tight truncate max-w-[100px] sm:max-w-none">
                 {author}
               </span>
             </div>
-            <span className="font-medium tracking-tight text-gray-400">
+            <span className="font-medium tracking-tight text-gray-400 mr-2.5">
               {formatDate(created_utc)}
             </span>
           </div>
         </div>
 
-        {/* Right Actions (Hidden on small, visible on md+) */}
+        {/* Comment Share */}
         <div className="hidden md:flex flex-col items-center justify-center px-3 shrink-0">
           <div className="flex items-center gap-2 text-muted-foreground mb-3">
             <MessageSquare className="h-4 w-4" />
@@ -138,7 +144,7 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
           </div>
         </div>
 
-        {/* Vote Panel */}
+        {/* Voting */}
         <div className="w-full sm:w-16 border-t sm:border-t-0 sm:border-l border-border flex sm:flex-col items-center justify-between sm:justify-center space-x-4 sm:space-x-0 sm:space-y-5 p-2 sm:p-0">
           <div className="bg-[#ff4400]/10 h-[1.5rem] w-8 sm:w-10 rounded-xs flex items-center justify-center">
             <ChevronUp
@@ -161,14 +167,10 @@ const PostCard: React.FC<{ post: RedditPostData }> = ({ post }) => {
   );
 };
 
-// --- MAIN COMPONENT ---
 const RedditPostCardList: React.FC = () => {
   const [posts, setPosts] = useState<RedditPostData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [sort, setSort] = useState<
-    "hot" | "new" | "controversial" | "rising" | "top"
-  >("hot");
-
+  const [sort, setSort] = useState<"hot" | "new" | "controversial" | "rising" | "top">("hot");
   const [after, setAfter] = useState<string | null>(null);
   const [before, setBefore] = useState<string | null>(null);
   const [count, setCount] = useState<number>(0);
@@ -189,8 +191,7 @@ const RedditPostCardList: React.FC = () => {
     }
 
     try {
-      const res = await fetch(url);
-      const data: RedditAPIResponse = await res.json();
+      const { data } = await axios.get<RedditAPIResponse>(url);
       const newPosts: RedditPostData[] = data.data.children.map((p) => p.data);
 
       setPosts(newPosts);
@@ -204,7 +205,9 @@ const RedditPostCardList: React.FC = () => {
       console.error("Failed to load posts:", err);
     } finally {
       setIsLoading(false);
-      document.querySelector(".post-scroll-container")?.scrollTo({ top: 0, behavior: "smooth" });
+      document
+        .querySelector(".post-scroll-container")
+        ?.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -216,7 +219,7 @@ const RedditPostCardList: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-2 sm:px-4 relative h-screen flex flex-col">
-      {/* Header (Fixed) */}
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 bg-background z-20 sticky top-0 py-2 sm:py-3 gap-2 sm:gap-0">
         <h2 className="text-base sm:text-lg font-semibold text-foreground text-center sm:text-left">
           Popular
@@ -226,7 +229,7 @@ const RedditPostCardList: React.FC = () => {
             <button
               key={f}
               onClick={() => setSort(f)}
-              className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md transition-all ${
+              className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-xs transition-all ${
                 sort === f
                   ? "bg-muted font-semibold text-foreground"
                   : "text-muted-foreground hover:bg-muted"
@@ -257,7 +260,7 @@ const RedditPostCardList: React.FC = () => {
         )}
       </div>
 
-      {/* Pagination (Fixed bottom) */}
+      {/* Pagination */}
       {!isLoading && posts.length > 0 && (
         <div className="flex flex-col sm:flex-row justify-between items-center bg-background py-2 sm:py-3 sticky bottom-0 z-20 gap-2 sm:gap-0">
           <button

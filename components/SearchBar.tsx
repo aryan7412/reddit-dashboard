@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import axios from "axios";
 
 interface RedditPost {
   id: string;
@@ -46,20 +47,15 @@ const SearchBar = () => {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch(
-          `https://www.reddit.com/search.json?q=${encodeURIComponent(query)}&limit=10`,
+
+        const { data } = await axios.get<RedditAPIResponse>(
+          `https://www.reddit.com/search.json`,
           {
+            params: { q: query, limit: 10 },
             signal: controller.signal,
-            headers: {
-              Accept: "application/json",
-            },
-            cache: "no-store",
+            headers: { Accept: "application/json" },
           }
         );
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-        const data: RedditAPIResponse = await res.json();
 
         const items = (data?.data?.children ?? []).map((c) => {
           const d = c.data;
@@ -73,7 +69,8 @@ const SearchBar = () => {
 
         setResults(items);
       } catch (e) {
-        if (e instanceof Error && e.name !== "AbortError") {
+        if (axios.isCancel(e)) return; // ignore cancellations
+        if (e instanceof Error) {
           setError(e.message || "Failed to search");
           setResults([]);
         }

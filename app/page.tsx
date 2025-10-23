@@ -8,7 +8,7 @@ const page = () => {
   return (
     <div className='overflow-hidden'>
       <Navbar /> 
-      <div className='mx-auto max-w-screen-2xl px-1 sm:px-3 lg:px-4'>
+      <div className='mx-auto max-w-screen-2xl px-1 sm:px-3 lg:px-4 bg-[#f2f7fb] dark:bg-gray-900'>
         <div className='flex flex-col lg:flex-row'>
           {/* Left sidebar (filters) */}
           <div className='hidden lg:block lg:w-64 xl:w-90 2xl:w-80'><FilterSection /></div>

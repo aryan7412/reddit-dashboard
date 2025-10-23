@@ -13,7 +13,7 @@ const mainLinks = [
 
 const page = () => {
     return (
-        <div className='bg-transparent'>
+        <div className='bg-transparent ml-4'>
             {/* Card1- About Sale */}
             <div className=''>
                 <Image
@@ -29,8 +29,6 @@ const page = () => {
                 <div className='flex gap-28 absolute translate-z-5'>
                     <div><PiDotsNineThin className='text-muted h-15 w-15' strokeWidth={4} /></div>
                 </div>
-
-                {/* Moved Circle to top-right */}
                 <div className="absolute -top-10 -right-7 translate-z-10">
                     <Circle className="text-muted h-25 w-25" strokeWidth={1.5} />
                 </div>
@@ -58,12 +56,10 @@ const page = () => {
 
             {/* Footer */}
             <div className="rounded-lg max-w-md w-full mt-36 mx-auto">
-                {/* Grid for the main navigation links */}
                 <hr className='mb-4 border-border' />
                 <ul className="grid grid-cols-3 gap-y-4 mb-4">
                     {mainLinks.map((link, index) => (
-                        <li key={index} className="flex items-center text-[0.772rem]">
-                            {/* The bullet point before each link */}
+                        <li key={index} className="flex items-center text-[0.75rem]">
                             <span className="text-muted-foreground mr-1">•</span>
                             <a href="#" className="text-foreground hover:underline">
                                 {link}
@@ -72,7 +68,7 @@ const page = () => {
                     ))}
                 </ul>
                 <hr className='mb-4 border-border' />
-                {/* Bottom section for copyright and legal links */}
+                {/* Copyright and legal links */}
                 <div className="flex justify-between items-center text-[0.8rem] text-muted-foreground font-medium">
                     <p>&copy; 2020</p>
                     <div className="flex items-center space-x-4">

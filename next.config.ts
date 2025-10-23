@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "avatars.githubusercontent.com" },
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
     ],
+     domains: [
+      "www.redditstatic.com", // Add Reddit avatars
+      "preview.redd.it",      // Optional: for post previews
+    ],
   },
 };
 
