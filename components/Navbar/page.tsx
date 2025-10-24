@@ -45,8 +45,8 @@ const Navbar = () => {
                     {/* Popular */}
                     <div className="flex items-center cursor-pointer">
                         <div className="flex items-center text-[#ff4400]">
-                            <Tally1 className="h-2 mt-[0.45rem]" strokeWidth={7} />
-                            <Tally1 className="h-3 mt-[0.32rem] -ml-[1.12rem]" strokeWidth={5} />
+                            <Tally1 className="h-2 mt-[0.5rem]" strokeWidth={7} />
+                            <Tally1 className="h-3 mt-[0.34rem] -ml-[1.12rem]" strokeWidth={5} />
                             <MoveUp className="h-4 -ml-[1.43rem]" strokeWidth={4} />
                         </div>
                         <p className="text-[#ff4400] font-bold mt-1 -ml-1">Popular</p>
@@ -56,8 +56,8 @@ const Navbar = () => {
                     <div className="flex items-center cursor-pointer">
                         <div className="flex items-center">
                             <Tally1 className="h-[0.7rem] mt-[0.32rem]" strokeWidth={6} />
-                            <MoveUp className="h-4 -ml-[1.4475rem] mt-[0.06rem]" strokeWidth={4} />
-                            <Tally1 className="h-[0.7rem] -ml-[1.01rem] mt-[0.32rem]" strokeWidth={6} />
+                            <MoveUp className="h-4 -ml-[1.4575rem] mt-[0.03rem]" strokeWidth={4} />
+                            <Tally1 className="h-[0.7rem] -ml-[1rem] mt-[0.32rem]" strokeWidth={6} />
                         </div>
                         <p className="mt-1 -ml-1.5">All</p>
                     </div>
@@ -116,8 +116,8 @@ const Navbar = () => {
 
                             <div className="flex items-center cursor-pointer">
                                 <div className="flex items-center text-[#ff4400]">
-                                    <Tally1 className="h-2 mt-[0.45rem]" strokeWidth={7} />
-                                    <Tally1 className="h-3 mt-[0.3125rem] -ml-[1.12rem]" strokeWidth={5} />
+                                    <Tally1 className="h-2 mt-[0.5rem]" strokeWidth={7} />
+                                    <Tally1 className="h-3 mt-[0.34rem] -ml-[1.12rem]" strokeWidth={5} />
                                     <MoveUp className="h-4 -ml-[1.43rem]" strokeWidth={4} />
                                 </div>
                                 <p className="text-[#ff4400] font-bold mt-1 -ml-1">Popular</p>
@@ -126,8 +126,8 @@ const Navbar = () => {
                             <div className="flex items-center cursor-pointer">
                                 <div className="flex items-center">
                                     <Tally1 className="h-[0.7rem] mt-[0.32rem]" strokeWidth={6} />
-                                    <MoveUp className="h-4 -ml-[1.4475rem] mt-[0.06rem]" strokeWidth={4} />
-                                    <Tally1 className="h-[0.7rem] -ml-[1.01rem] mt-[0.32rem]" strokeWidth={6} />
+                                    <MoveUp className="h-4 -ml-[1.4475rem] mt-[0.03rem]" strokeWidth={4} />
+                                    <Tally1 className="h-[0.7rem] -ml-[1rem] mt-[0.3rem]" strokeWidth={6} />
                                 </div>
                                 <p className="mt-1 -ml-1.5">All</p>
                             </div>
