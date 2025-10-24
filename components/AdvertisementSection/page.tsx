@@ -55,7 +55,7 @@ const page = () => {
             </div>
 
             {/* Footer */}
-            <div className="rounded-lg max-w-md w-full mt-36 mx-auto">
+            <div className="rounded-lg max-w-md w-full lg:mt-36 mx-auto sm: mt-10">
                 <hr className='mb-4 border-border' />
                 <ul className="grid grid-cols-3 gap-y-4 mb-4">
                     {mainLinks.map((link, index) => (

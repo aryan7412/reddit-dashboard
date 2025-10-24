@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import Navbar from "@/components/Navbar/page"
 import RedditPostCardList from "@/components/RedditPostCardList/page"
@@ -7,7 +9,7 @@ const page = () => {
   return (
     <div className='overflow-hidden'>
       <Navbar /> 
-      <div className='mx-auto max-w-screen-2xl px-1 sm:px-3 lg:px-4 bg-[#f2f7fb] dark:bg-gray-900'>
+      <div className='mx-auto max-w-screen-2xl px-1 sm:px-3 lg:px-4 bg-[#f2f7fb] dark:bg-gray-950'>
         {/* Mobile Filters (Dropdown) */}
         <div className='block lg:hidden mt-4'>
           <FilterSection />
@@ -25,7 +27,7 @@ const page = () => {
         </div>
 
         {/* Mobile/Tablet Ads at Bottom */}
-        <div className='block xl:hidden w-full mt-6'>
+        <div className='block xl:hidden w-full mt-2'>
           <AdvertisementSection />
         </div>
       </div>

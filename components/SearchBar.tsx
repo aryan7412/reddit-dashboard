@@ -1,9 +1,8 @@
-'use client'
+'use client';
 
 import * as React from "react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import axios from "axios";
 
 interface RedditPost {
   id: string;
@@ -34,7 +33,6 @@ const SearchBar = () => {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  // Debounced search
   React.useEffect(() => {
     if (!query.trim()) {
       setResults([]);
@@ -48,14 +46,17 @@ const SearchBar = () => {
         setLoading(true);
         setError(null);
 
-        const { data } = await axios.get<RedditAPIResponse>(
-          `https://www.reddit.com/search.json`,
-          {
-            params: { q: query, limit: 10 },
-            signal: controller.signal,
-            headers: { Accept: "application/json" },
-          }
+        const response = await fetch(
+          `/api/reddit?q=${encodeURIComponent(query)}`,
+          { headers: { Accept: "application/json" }, signal: controller.signal }
         );
+
+
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        }
+
+        const data: RedditAPIResponse = await response.json();
 
         const items = (data?.data?.children ?? []).map((c) => {
           const d = c.data;
@@ -69,15 +70,18 @@ const SearchBar = () => {
 
         setResults(items);
       } catch (e) {
-        if (axios.isCancel(e)) return; // ignore cancellations
+        if (e instanceof DOMException && e.name === "AbortError") return;
         if (e instanceof Error) {
-          setError(e.message || "Failed to search");
-          setResults([]);
+          setError(e.message);
+        } else {
+          setError("Failed to search");
         }
-      } finally {
+        setResults([]);
+      }
+      finally {
         setLoading(false);
       }
-    }, 400); // debounce
+    }, 400);
 
     return () => {
       controller.abort();
